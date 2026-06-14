@@ -12,26 +12,30 @@ if(isset($_POST['submit'])) {
     $main_text = $_POST['postContent'];
 
     if (!$title || !$main_text) die("no data post");
-    $sql = "INSERT INTO posts (title, main_text) VALUES ('$title', '$main_text')";
 
-    if (!mysqli_query($link,$sql)) die("error insert data post");
+    if(!empty($_FILES["file"])) {
 
-    if(!empty($_FILES["file"]))
-    {
-        if (((@$_FILES["file"]["type"] == "image/gif") || (@$_FILES["file"]["type"] == "image/jpeg")
-        || (@$_FILES["file"]["type"] == "image/jpg") || (@$_FILES["file"]["type"] == "image/pjpeg")
-        || (@$_FILES["file"]["type"] == "image/x-png") || (@$_FILES["file"]["type"] == "image/png"))
-        && (@$_FILES["file"]["size"] < 102400))
-        {
-            move_uploaded_file($_FILES["file"]["tmp_name"], "upload/" . $_FILES["file"]["name"]);
-            echo "load in: " . "upload/" . $_FILES["file"]["name"];
-        }
-        else
-        {
-            echo "upload failed!";
+        $allowedTypes = ["image/gif", "image/jpeg", "image/jpg", "image/pjpeg", "image/x-png", "image/png"];
+        if (in_array($_FILES["file"]["type"], $allowedTypes) && $_FILES["file"]["size"] < 1024000) {
+            $targetDir = "upload/";
+
+            if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
+
+            $imageName = basename($_FILES["file"]["name"]);
+            move_uploaded_file($_FILES["file"]["tmp_name"], $targetDir . $imageName);
+
+        } else {
+            echo "upload failed! (Wrong type or size)";
         }
     }
-}
+
+    $sql = "INSERT INTO posts (title, main_text, image) VALUES ('$title', '$main_text', '$imageName')";
+
+    if (!mysqli_query($link,$sql)) die("error insert data post: " . mysqli_error($link));
+    
+    header("Location: index.php");
+    exit();
+    }
 ?>
 
 <!DOCTYPE html>

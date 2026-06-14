@@ -24,6 +24,14 @@
                       echo "<h1> $title </h1>";
                       echo "<p>$main_text </p>";
                   ?>
+                  <?php if (!empty($image)): ?>
+                    <div class="my-4">
+                        <img src="upload/<?php echo htmlspecialchars($image); ?>" 
+                             alt="Post Image" 
+                             class="hacker-img" 
+                             style="max-width: 100%; height: auto;">
+                    </div>
+                <?php endif; ?>
               </div>
           </div>
       </div>
