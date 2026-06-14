@@ -14,11 +14,11 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <h1 class="mb-4">Login</h1>
-                    <form action="login.html" method="POST" class="d-flex flex-column gap-3">
+                    <form action="/login.php" method="POST" class="d-flex flex-column gap-3">
                         <input type="text" name="login" class="form-control hacker-input" placeholder="login">
                         <input type="password" name="password" class="form-control hacker-input" placeholder="password">
                         <button class="btn btn-primary" type="submit" name="submit">Login</button>
-                        <p class="mt-3">Don't have an account? <a href="registration.html">Register</a></p>
+                        <p class="mt-3">Don't have an account? <a href="/registration.php">Register</a></p>
                     </form>
                 </div>
             </div>
@@ -27,3 +27,32 @@
 <footer>DevSecOps is a metholodogy, not just a profession</footer>
 
 </html>
+
+<?php
+require_once('db.php');
+
+if (isset($_COOKIE['User'])){
+    header("location: /profile.php");
+    exit();
+}
+
+$link = mysqli_connect('127.0.0.1', 'root', 'kali', 'first');
+
+if (isset($_POST['submit'])) {
+    $login = $_POST['login'];
+    $pass = $_POST['password'];
+
+    if (!$login || !$pass) die ("input all parameters");
+
+    $sql = "SELECT * FROM users WHERE username='$login' AND pass='$pass'";
+
+    $result = mysqli_query($link, $sql);
+
+    if (mysqli_num_rows($result) == 1) {
+        setcookie("User", $login, time()+7200);
+        header("location: profile.php");
+    } else {
+        echo 'incorrect username or password';
+    }
+}
+?>
