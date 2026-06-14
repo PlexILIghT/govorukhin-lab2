@@ -19,7 +19,7 @@
                         <input type="email" name="email" class="form-control hacker-input" placeholder="email">
                         <input type="password" name="password" class="form-control hacker-input" placeholder="password">
                         <button class="btn btn-primary" type="submit" name="submit">Register</button>
-                        <p class="mt-3">Already have an account? <a href="login.html">Login</a></p>
+                        <p class="mt-3">Already have an account? <a href="/login.php">Login</a></p>
                     </form>
                 </div>
             </div>
