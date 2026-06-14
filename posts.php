@@ -1,13 +1,18 @@
 <?php
     $link = mysqli_connect('127.0.0.1', 'root', 'kali', 'app');
+
     
     $id = $_GET['id'];
     $sql = "SELECT * FROM posts WHERE id=$id";
     $res = mysqli_query($link, $sql);
-    $title = $rows['title'];
-    $main_text = $rows['main_text'];
-    $image = $rows['image'];
-
+    
+    if ($rows = mysqli_fetch_array($res)) {
+        $title = $rows['title'];
+        $main_text = $rows['main_text'];
+        $image = $rows['image'];
+    } else {
+        die("Пост не найден");
+    }
 ?>
 
 <!DOCTYPE html>
